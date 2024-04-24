@@ -21,6 +21,12 @@ const cheeseSchema = new Schema(
 		image: { type: String, required: [true, 'Image is required'] },
 		totalOffers: { type: Number, required: [true, 'Total offers is required'], default: 0 },
 		active: { type: Boolean, required: [true, 'Active status is required'], default: true },
+		highestOffer: {
+			type: Number,
+			default: 0,
+			required: [true, 'Amount is required'],
+			min: [0, 'Minimum amount is $0'],
+		},
 	},
 	{
 		timestamps: true,

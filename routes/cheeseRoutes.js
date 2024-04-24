@@ -1,5 +1,6 @@
 const express = require('express');
 const controller = require('../controllers/cheeseController');
+const offerRoutes = require('../routes/offerRoutes');
 const router = express.Router();
 const { upload } = require('../middleware/fileUpload');
 const { validateId } = require('../middleware/validator');
@@ -30,5 +31,7 @@ router.delete('/item/:id', isLoggedIn, isAuthor, validateId, controller.delete);
 
 /**GET /item/:id : search for cheese listing via title and/or detail field (case-sens) */
 router.get('/search', controller.search);
+
+router.use('/:itemId/offers', offerRoutes);
 
 module.exports = router;

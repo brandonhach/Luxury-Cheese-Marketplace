@@ -25,7 +25,7 @@ exports.item = (req, res, next) => {
 		.then((cheese) => {
 			try {
 				if (cheese) {
-					return res.render('./cheese/item', { cheese });
+					return res.render('./cheese/item', { cheese, userId: req.session.userId });
 				} else {
 					let err = new Error('Cannot find cheese with id ' + id);
 					err.status = 400;
