@@ -48,7 +48,6 @@ exports.create = (req, res, next) => {
 	let item = new model(cheese);
 	try {
 		item.save().then((cheese) => {
-			console.log(cheese);
 			res.redirect('/listing');
 		});
 	} catch (err) {

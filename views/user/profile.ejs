@@ -4,6 +4,7 @@
 	<main class="w-screen overflow-auto bg-neutral-900 text-white mb-10">
 		<div class="flex flex-col items-center justify-center">
 			<h2 class="text-amber-100 text-4xl font-bold pt-4">Welcome, <%= user.firstName %> <%= user.lastName %></h2>
+			<h2 class="text-amber-100 text-2xl pt-4">My Listings</h2>
 
 			<div class="p-6 flex flex-row items-center justify-center w-1/2">
 				<table
@@ -82,6 +83,18 @@
 											</svg>
 										</button>
 									</form>
+									<form
+										action="/listing/item/<%= cheese.id %>/offers"
+										method="GET"
+										class="inline-block w-24"
+									>
+										<button
+											type="submit"
+											class="text-white bg-amber-700 hover:bg-amber-800 focus:outline-none focus:ring-4 focus:ring-amber-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-800 w-full flex flex-row items-center justify-center gap-1"
+										>
+											View Offers
+										</button>
+									</form>
 								</div>
 							</td>
 						</tr>
@@ -89,7 +102,7 @@
 					</tbody>
 				</table>
 			</div>
-			<%- include('../user/offers.ejs', { offers: offers }); %>
+			<%- include('../user/offers/myOffers.ejs', { offers: offers }); %>
 		</div>
 	</main>
 	<% } else { %>

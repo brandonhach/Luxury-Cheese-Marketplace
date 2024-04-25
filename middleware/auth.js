@@ -45,6 +45,7 @@ exports.isSeller = (req, res, next) => {
 	Cheese.findById(id)
 		.then((cheese) => {
 			if (cheese) {
+				console.log(cheese);
 				if (cheese.author === req.session.user) {
 					err.status = 401;
 					return next(err);
