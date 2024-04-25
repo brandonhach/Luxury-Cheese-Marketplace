@@ -1,4 +1,5 @@
 const model = require('../models/cheese');
+const Offer = require('../models/offer');
 
 /**GET /items: send all cheese listing to the user x */
 exports.index = (req, res) => {
@@ -73,6 +74,12 @@ exports.delete = (req, res, next) => {
 		return next(err);
 	}
 	try {
+		Offer.deleteMany({ cheese: id }).catch((err) => {
+			if (err.name === 'ValidationError') {
+				err.status = 400;
+			}
+			next(err);
+		});
 		model
 			.findByIdAndDelete(id, { useFindAndModify: false })
 			.then((cheese) => {
