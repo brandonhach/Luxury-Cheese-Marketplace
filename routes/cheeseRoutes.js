@@ -32,6 +32,6 @@ router.delete('/item/:id', isLoggedIn, isAuthor, validateId, controller.delete);
 /**GET /item/:id : search for cheese listing via title and/or detail field (case-sens) */
 router.get('/search', controller.search);
 
-router.use('/:itemId/offers', offerRoutes);
+router.use('/item/:id/offers', offerRoutes);
 
 module.exports = router;

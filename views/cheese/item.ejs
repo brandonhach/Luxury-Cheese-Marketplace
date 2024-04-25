@@ -19,8 +19,48 @@
 				<p class="font-semibold text-amber-50">
 					Seller: <span class="text-amber-200 font-semibold"><%= cheese.seller %> </span>
 				</p>
+
+				<%if(cheese.totalOffers >= 1 && cheese.active){ %>
+				<p class="font-semibold text-amber-50">
+					Current Highest Offer:
+					<span class="text-amber-200 font-semibold">$<%= cheese.highestOffer %> </span>
+				</p>
+
+				<%}%>
 				<p class="font-thin text-amber-50"><%= cheese.details %></p>
-				<%if(user.id === cheese.id){ %>
+
+				<%if(cheese.active){ %>
+				<form
+					action="/listing/item/<%= cheese.id %>/offers"
+					method="post"
+					class="flex flex-row justify-center items-center gap-4"
+				>
+					<div>
+						<label for="amount" class="sr-only">Offer</label>
+						<div class="relative">
+							<input
+								id="amount"
+								name="amount"
+								type="number"
+								min="10"
+								max="10000"
+								step="0.01"
+								required
+								class="bg-neutral-800 w-full text-white rounded-md h-10 pl-2 border-2 border-neutral-950"
+								placeholder="$"
+							/>
+						</div>
+					</div>
+					<div class="flex items-center justify-between">
+						<button
+							type="submit"
+							class="inline-block rounded-lg bg-amber-700 px-5 py-3 text-sm font-medium text-white"
+						>
+							Make an offer
+						</button>
+					</div>
+				</form>
+				<%}%> <%if(user && user.id === cheese.id){ %>
 				<div class="flex flex-row w-full gap-4 pt-2">
 					<form action="<%= cheese.id %>/edit" class="inline-block w-16">
 						<button

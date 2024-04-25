@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const controller = require('../controllers/offerController');
-const { isLoggedIn } = require('../middleware/auth');
+const { isLoggedIn, isSeller } = require('../middleware/auth');
 
-// GET /:itemId/offers/: send HTML form for user signup
+// GET /:itemId/offers/: view all offers
 // router.get('/', isGuest, controller.viewOffer);
 
-// // POST /:itemId/offers/: handle user signup
-// router.post('/', isLoggedIn, controller.makeOffer);
+// POST /:itemId/offer/: make an offer
+router.post('/', isLoggedIn, isSeller, controller.makeOffer);
 
-// //POST /:itemId/offers/:offerId/accept: authenticate user's login
+// //POST /:itemId/offers/:offerId/accept: accept offer
 // router.post('/:offerId/accept', isLoggedIn, controller.acceptOffer);
 
 module.exports = router;
