@@ -1,0 +1,59 @@
+<% if(offers.length > 0) { %>
+<main class="w-screen overflow-auto bg-neutral-900 text-white mb-10">
+	<div class="flex flex-col items-center justify-center">
+		<h2 class="text-amber-100 text-3xl pt-4 text-left">My offers</h2>
+
+		<div class="p-6 flex flex-row items-center justify-center w-1/2">
+			<table
+				class="bg-neutral-800 w-full text-white rounded-md h-10 pl-2 border-2 border-neutral-950 table-fixed"
+			>
+				<thead class="">
+					<tr>
+						<th class="w-24">Image</th>
+						<th class="w-24">Item</th>
+						<th class="w-12">Status</th>
+						<th class="w-24">Amount</th>
+					</tr>
+				</thead>
+
+				<tbody class="">
+					<% offers.forEach(offer => { %>
+					<tr class="divide-y">
+						<td>
+							<div class="w-full flex flex-row items-center rounded-md p-4">
+								<img src="<%= offer.cheese.image %>" alt="" class="" />
+							</div>
+						</td>
+						<td>
+							<div class="flex flex-row items-center justify-center w-full">
+								<h1 class="text-2xl underline">
+									<a href="/listing/item/<%= offer.cheese.id %>"><%= offer.cheese.title %></a>
+								</h1>
+							</div>
+						</td>
+						<td>
+							<div class="flex flex-row items-center justify-center w-full">
+								<h1 class="text-2xl"><%= offer.status %></h1>
+							</div>
+						</td>
+
+						<td>
+							<div class="flex flex-row items-center justify-center w-full">
+								<h1 class="text-2xl">$<%= offer.amount %></h1>
+							</div>
+						</td>
+					</tr>
+					<% }) %>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</main>
+<% } else { %>
+<div class="flex flex-col justify-center items-center w-full h-full">
+	<div class="w-1/2 h-1/2 flex flex-col items-center gap-4">
+		<h1 class="text-amber-300 text-4xl font-bold text-center">No offers made.</h1>
+	</div>
+</div>
+
+<% } %>
