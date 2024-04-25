@@ -39,24 +39,3 @@ exports.isAuthor = (req, res, next) => {
 		})
 		.catch((err) => next(err));
 };
-
-exports.isSeller = (req, res, next) => {
-	const id = req.params.id;
-	Cheese.findById(id)
-		.then((cheese) => {
-			if (cheese) {
-				console.log(cheese);
-				if (cheese.author === req.session.user) {
-					err.status = 401;
-					return next(err);
-				} else {
-					return next();
-				}
-			} else {
-				let err = new Error('Cannot find a cheese with id ' + id);
-				err.status = 404;
-				return next(err);
-			}
-		})
-		.catch((err) => next(err));
-};

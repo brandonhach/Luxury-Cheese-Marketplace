@@ -6,38 +6,49 @@ exports.makeOffer = (req, res, next) => {
 	let cheeseId = req.params.id;
 	let userId = req.session.user;
 
-	try {
-		const offer = new model({
-			cheese: cheeseId,
-			user: userId,
-			amount: req.body.amount,
-		});
-		offer
-			.save()
-			.then((offer) => {
-				return Cheese.findByIdAndUpdate(
-					cheeseId,
-					{
-						$max: { highestOffer: offer.amount },
-						$inc: { totalOffers: 1 },
-					},
-					{ new: true }
-				);
-			})
-			.then(res.redirect(`/listing/item/${cheeseId}`))
-			.catch((err) => {
+	// Find the cheese listing first
+	Cheese.findById(cheeseId)
+		.then((cheese) => {
+			if (cheese.author.toString() === userId.toString()) {
+				let err = new Error('You cannot make an offer on your own listing');
+				err.status = 401;
+				return next(err);
+			}
+			try {
+				const offer = new model({
+					cheese: cheeseId,
+					user: userId,
+					amount: req.body.amount,
+				});
+
+				offer
+					.save()
+					.then((offer) => {
+						return Cheese.findByIdAndUpdate(
+							cheeseId,
+							{
+								$max: { highestOffer: offer.amount },
+								$inc: { totalOffers: 1 },
+							},
+							{ new: true }
+						);
+					})
+					.then(() => res.redirect(`/listing/item/${cheeseId}`))
+					.catch((err) => {
+						if (err.name === 'ValidationError') {
+							err.status = 400;
+						}
+						next(err);
+					});
+			} catch (err) {
 				if (err.name === 'ValidationError') {
 					err.status = 400;
 				}
+				console.log('Failed to create offer:', err);
 				next(err);
-			});
-	} catch (err) {
-		if (err.name === 'ValidationError') {
-			err.status = 400;
-		}
-		console.log('Failed to create offer:', err);
-		next(err);
-	}
+			}
+		})
+		.catch((err) => next(err));
 };
 
 // GET /:itemId/offers/: view all offers

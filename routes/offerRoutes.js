@@ -7,7 +7,7 @@ const { isLoggedIn, isSeller, isAuthor } = require('../middleware/auth');
 router.get('/', isLoggedIn, isAuthor, controller.viewOffers);
 
 // POST /:itemId/offer/: make an offer
-router.post('/', isLoggedIn, isSeller, controller.makeOffer);
+router.post('/', isLoggedIn, controller.makeOffer);
 
 //POST /:itemId/offers/:offerId/accept: accept offer
 router.post('/:offerId/accept', isLoggedIn, isAuthor, controller.acceptOffer);
