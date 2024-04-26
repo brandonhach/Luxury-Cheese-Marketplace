@@ -1,15 +1,21 @@
 const User = require('../models/user');
 const Cheese = require('../models/cheese');
 const Offer = require('../models/offer');
+const { validationResult } = require('express-validator');
 
 exports.new = (req, res) => {
-	res.render('./user/new', {
-		errorMessages: req.flash('error'),
-		successMessages: req.flash('success'),
-	});
+	res.render('./user/new');
 };
 
 exports.create = (req, res, next) => {
+	let errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		errors.array().forEach((error) => {
+			req.flash('error', error.msg);
+		});
+		return res.redirect('/users/new');
+	}
+
 	let user = new User(req.body);
 	user.save()
 		.then((user) => {
@@ -35,7 +41,14 @@ exports.getUserLogin = (req, res) => {
 	res.render('./user/login');
 };
 
-exports.login = (req, res) => {
+exports.login = (req, res, next) => {
+	let errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		errors.array().forEach((error) => {
+			req.flash('error', error.msg);
+		});
+		return res.redirect('/users/login');
+	}
 	let email = req.body.email;
 	let password = req.body.password;
 	console.log(req.flash());

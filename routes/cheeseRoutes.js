@@ -5,6 +5,7 @@ const router = express.Router();
 const { upload } = require('../middleware/fileUpload');
 const { validateId } = require('../middleware/validator');
 const { isLoggedIn, isAuthor } = require('../middleware/auth');
+const { body } = require('express-validator');
 
 // route off of /listing/...
 
@@ -15,7 +16,21 @@ router.get('/', controller.index);
 router.get('/item/:id', validateId, controller.item);
 
 /**POST /post_cheese : create a new cheese listing */
-router.post('/post_cheese', isLoggedIn, upload, controller.create);
+router.post(
+	'/post_cheese',
+	isLoggedIn,
+	upload,
+	[
+		body('title', 'Invalid title').trim().escape(),
+		body('price', 'Invalid price').trim().escape(),
+		body('details', 'Invalid details').trim().escape(),
+		body('condition', 'Invalid cheese condition')
+			.trim()
+			.escape()
+			.isIn(['Mild', 'Matured', 'Aged', 'Extra-Aged', 'Vintage']),
+	],
+	controller.create
+);
 
 /**GET /new: display create cheese form */
 router.get('/new', isLoggedIn, controller.new);
@@ -24,7 +39,24 @@ router.get('/new', isLoggedIn, controller.new);
 router.get('/item/:id/edit', isLoggedIn, isAuthor, validateId, controller.edit);
 
 // /**PUT /item/:id : update a cheese listing */
-router.put('/item/:id/edit/update', isLoggedIn, isAuthor, validateId, upload, controller.update);
+router.put(
+	'/item/:id/edit/update',
+	isLoggedIn,
+	isAuthor,
+	validateId,
+	upload,
+	[
+		body('title', 'Invalid title').trim().escape(),
+		body('price', 'Invalid price').trim().isFloat({ min: 10, max: 10000 }),
+		body('details', 'Invalid details').trim().escape(),
+		body('condition', 'Invalid cheese condition')
+			.trim()
+			.escape()
+			.isIn(['Mild', 'Matured', 'Aged', 'Extra-Aged', 'Vintage']),
+		body('image', 'Invalid file type').trim().escape(),
+	],
+	controller.update
+);
 
 /**DELETE /item/:id : delete the cheese identified by id */
 router.delete('/item/:id', isLoggedIn, isAuthor, validateId, controller.delete);

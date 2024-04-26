@@ -1,5 +1,6 @@
 const model = require('../models/cheese');
 const Offer = require('../models/offer');
+const { validationResult } = require('express-validator');
 
 /**GET /items: send all cheese listing to the user x */
 exports.index = (req, res) => {
@@ -46,6 +47,15 @@ exports.create = (req, res, next) => {
 	cheese.seller = `${req.session.firstName} ${req.session.lastName}`; //new here
 	cheese.image = '/images/uploads/' + req.file.filename;
 	cheese.author = req.session.user;
+
+	let errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		errors.array().forEach((error) => {
+			req.flash('error', error.msg);
+		});
+		return res.redirect(`/listing/item/${cheese.id}`);
+	}
+
 	let item = new model(cheese);
 	try {
 		item.save().then((cheese) => {
@@ -106,6 +116,15 @@ exports.delete = (req, res, next) => {
 /**UPDATE /item/:id : update a cheese listing x */
 exports.update = (req, res, next) => {
 	let id = req.params.id;
+
+	let errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		errors.array().forEach((error) => {
+			req.flash('error', error.msg);
+		});
+		return res.redirect('/listing/item/' + id);
+	}
+
 	if (!id.match(/^[0-9a-fA-F]{24}$/)) {
 		let err = new Error('Invalid story id');
 		err.status = 400;
@@ -151,6 +170,15 @@ exports.update = (req, res, next) => {
 /**GET /item/:id/edit : create a new cheese listing x */
 exports.edit = (req, res, next) => {
 	let id = req.params.id;
+
+	let errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		errors.array().forEach((error) => {
+			req.flash('error', error.msg);
+		});
+		return res.redirect('/listing/item/' + id + '/edit');
+	}
+
 	if (!id.match(/^[0-9a-fA-F]{24}$/)) {
 		let err = new Error('Invalid story id');
 		err.status = 400;

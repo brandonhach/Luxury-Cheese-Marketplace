@@ -1,10 +1,19 @@
 const Cheese = require('../models/cheese');
 const model = require('../models/offer');
+const { validationResult } = require('express-validator');
 
 /**POST /post_cheese : create a new cheese listing x */
 exports.makeOffer = (req, res, next) => {
 	let cheeseId = req.params.id;
 	let userId = req.session.user;
+
+	let errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		errors.array().forEach((error) => {
+			req.flash('error', error.msg);
+		});
+		return res.redirect(`/listing/item/${cheeseId}`);
+	}
 
 	// Find the cheese listing first
 	Cheese.findById(cheeseId)
