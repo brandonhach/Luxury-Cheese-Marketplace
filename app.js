@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
+require('dotenv').config();
 
 //create app
 const app = express();
@@ -15,7 +16,7 @@ const app = express();
 //config app
 let port = 3000;
 let host = 'localhost';
-let url = process.env.PORT;
+let url = process.env.MONGODB_URL;
 app.set('view engine', 'ejs');
 
 //mount middleware
