@@ -15,7 +15,8 @@ const app = express();
 //config app
 let port = 3000;
 let host = 'localhost';
-let url = '';
+let url =
+	'mongodb+srv://abc:abc@cluster0.ajdfy36.mongodb.net/nbda-project3?retryWrites=true&w=majority&appName=Cluster0';
 app.set('view engine', 'ejs');
 
 //mount middleware
