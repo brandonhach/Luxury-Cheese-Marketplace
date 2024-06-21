@@ -14,7 +14,7 @@ require('dotenv').config();
 const app = express();
 
 //config app
-let port = 3000;
+const port = process.env.PORT || 3000;
 let host = 'localhost';
 let url = process.env.MONGODB_URL;
 app.set('view engine', 'ejs');
@@ -79,7 +79,7 @@ mongoose
 		useCreateIndex: true,
 	})
 	.then(() => {
-		app.listen(port, host, () => {
+		app.listen(port, () => {
 			console.log('Server is running on port', port);
 		});
 	});
